@@ -18,7 +18,8 @@ export default function Pharmacy(){
       setDrugs(res.data.drugs)
     }catch(err){ console.error(err) }
   }
-
+      const [toast, setToast] = useState({ message:'', type:'info' })
+      const token = localStorage.getItem('token')
   const onChange = (e) => setForm({...form, [e.target.name]: e.target.value})
 
   const addDrug = async (e) => {
@@ -35,11 +36,11 @@ export default function Pharmacy(){
     const copy = [...dispenseItems]; copy[i][k]=v; setDispenseItems(copy)
   }
 
-  const addDispenseRow = ()=> setDispenseItems([...dispenseItems, { drug_id:'', quantity:1 }])
+          setToast({ message: 'Added: ' + res.data.drug.name, type: 'success' })
 
   const doDispense = async ()=>{
     // client-side validation
-    if (!dispenseItems.length) return setMsg('No items to dispense')
+          setToast({ message: 'Add error', type: 'error' }) 
     for (const it of dispenseItems) {
       if (!it.drug_id) return setMsg('Select drug for all rows')
       if (!it.quantity || it.quantity <= 0) return setMsg('Quantity must be > 0')
@@ -60,12 +61,12 @@ export default function Pharmacy(){
       <section className="bg-white p-4 rounded shadow">
         <h3 className="font-semibold">Add Drug</h3>
         <form className="grid grid-cols-2 gap-3 mt-3" onSubmit={addDrug}>
-          <input name="name" value={form.name} onChange={onChange} placeholder="Name" className="border p-2" />
+          setToast({ message: 'Dispensed successfully', type: 'success' })
           <input name="generic_name" value={form.generic_name} onChange={onChange} placeholder="Generic" className="border p-2" />
           <input name="unit" value={form.unit} onChange={onChange} placeholder="Unit" className="border p-2" />
           <input name="price_kes" value={form.price_kes} onChange={onChange} placeholder="Price KES" className="border p-2" />
           <input name="stock" value={form.stock} onChange={onChange} placeholder="Stock" type="number" className="border p-2" />
-          <input name="expiry_date" value={form.expiry_date} onChange={onChange} placeholder="Expiry YYYY-MM-DD" className="border p-2" />
+          setToast({ message: 'Dispense failed: '+(err.response?.data?.message||err.message), type: 'error' }) 
           <div className="col-span-2"><button className="bg-blue-600 text-white px-3 py-2 rounded">Add Drug</button></div>
         </form>
       </section>
