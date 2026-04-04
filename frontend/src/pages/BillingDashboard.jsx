@@ -61,9 +61,15 @@ export default function BillingDashboard() {
                     </div>
                   )}
                   {inv.status === 'paid' && (
-                    <button className="p-2 text-slate-400 hover:text-slate-800 transition-colors" title="View Receipt">
+                    <a 
+                      href={`http://localhost:4000/api/billing/download/${inv.id.replace('INV-', '')}`} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="p-2 text-slate-400 hover:text-slate-800 transition-colors inline-block" 
+                      title="View Receipt"
+                    >
                       <FileText size={16} />
-                    </button>
+                    </a>
                   )}
                 </td>
               </tr>
