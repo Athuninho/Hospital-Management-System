@@ -11,6 +11,7 @@ const pharmacyRoutes = require('./routes/pharmacy');
 const labRoutes = require('./routes/lab');
 const nhifRoutes = require('./routes/nhif');
 const appointmentRoutes = require('./routes/appointments');
+const wardRoutes = require('./routes/wards');
 const { auditMiddleware } = require('./middleware/audit');
 
 const app = express();
@@ -28,6 +29,7 @@ app.use('/api/pharmacy', pharmacyRoutes);
 app.use('/api/lab', labRoutes);
 app.use('/api/nhif', nhifRoutes);
 app.use('/api/appointments', appointmentRoutes);
+app.use('/api/wards', wardRoutes);
 
 app.use((err, req, res, next)=>{
   console.error(err);
