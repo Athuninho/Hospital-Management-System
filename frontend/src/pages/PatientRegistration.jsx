@@ -1,50 +1,67 @@
-import React, { useState } from 'react'
-import api from '../services/api'
+import React from 'react';
+import { UserPlus } from 'lucide-react';
 
-export default function PatientRegistration(){
-  const [form, setForm] = useState({ first_name:'', last_name:'', national_id:'', phone:'', nhif_number:'', next_of_kin: '' });
-  const [msg, setMsg] = useState('');
-  const onChange = e => setForm({...form, [e.target.name]: e.target.value});
-  const submit = async (e)=>{
-    e.preventDefault();
-    try{
-      const payload = { ...form, next_of_kin: { name: form.next_of_kin } };
-      const token = localStorage.getItem('token');
-      const res = await api.post('/patients', payload, { headers: { Authorization: `Bearer ${token}` } });
-      setMsg('Patient created: ' + res.data.patient.id);
-    }catch(err){ setMsg('Error: ' + (err.response?.data?.error||err.message)) }
-  }
+export default function PatientRegistration() {
   return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded shadow">
-      <h2 className="text-xl font-semibold mb-4">Register Patient</h2>
-      <form onSubmit={submit} className="space-y-3">
+    <div className="animate-fade-in max-w-4xl mx-auto">
+      <div className="flex justify-between items-center mb-8">
         <div>
-          <label>First name</label>
-          <input name="first_name" value={form.first_name} onChange={onChange} className="w-full border p-2" />
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">Patient Registration</h1>
+          <p className="text-slate-500">Add a new patient to the EMR system.</p>
         </div>
-        <div>
-          <label>Last name</label>
-          <input name="last_name" value={form.last_name} onChange={onChange} className="w-full border p-2" />
-        </div>
-        <div>
-          <label>National ID</label>
-          <input name="national_id" value={form.national_id} onChange={onChange} className="w-full border p-2" />
-        </div>
-        <div>
-          <label>Phone</label>
-          <input name="phone" value={form.phone} onChange={onChange} className="w-full border p-2" />
-        </div>
-        <div>
-          <label>NHIF Number</label>
-          <input name="nhif_number" value={form.nhif_number} onChange={onChange} className="w-full border p-2" />
-        </div>
-        <div>
-          <label>Next of kin (name)</label>
-          <input name="next_of_kin" value={form.next_of_kin} onChange={onChange} className="w-full border p-2" />
-        </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded">Register</button>
-      </form>
-      {msg && <p className="mt-3">{msg}</p>}
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
+        <form className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">First Name</label>
+              <input type="text" className="w-full border border-slate-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Enter first name" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Last Name</label>
+              <input type="text" className="w-full border border-slate-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Enter last name" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">National ID</label>
+              <input type="text" className="w-full border border-slate-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="e.g. 12345678" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">NHIF Number</label>
+              <input type="text" className="w-full border border-slate-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Enter NHIF number" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Phone Number</label>
+              <input type="text" className="w-full border border-slate-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="07XX XXX XXX" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Date of Birth</label>
+              <input type="date" className="w-full border border-slate-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+            </div>
+          </div>
+          
+          <div className="border-t border-slate-100 pt-6 mt-6">
+            <h3 className="text-lg font-semibold text-slate-800 mb-4">Emergency Contact (Next of Kin)</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Name</label>
+                <input type="text" className="w-full border border-slate-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Next of kin name" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Phone</label>
+                <input type="text" className="w-full border border-slate-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Contact number" />
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-4 flex justify-end">
+            <button type="button" className="flex items-center gap-2 bg-primary hover:bg-blue-700 text-white px-8 py-3 rounded-lg shadow-lg shadow-blue-500/30 transition-all font-medium text-lg">
+              <UserPlus size={20} />
+              Register Patient
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-  )
+  );
 }
