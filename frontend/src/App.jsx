@@ -14,7 +14,7 @@ function App(){
         </div>
       </header>
       <main className="p-6">
-        {page === 'home' && <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow"><p>Welcome to the Hospital Management System prototype.</p></div>}
+        {page === 'home' && <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow"><p>Welcome to the Mombasa Hospital.</p></div>}
         {page === 'register' && <PatientRegistration />}
         {page === 'billing' && <BillingPage />}
       </main>
