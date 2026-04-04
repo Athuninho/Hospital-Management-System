@@ -1,4 +1,5 @@
 const db = require('../db');
+const smsService = require('../services/smsService');
 
 const registerPatient = async (req, res) => {
   try {
@@ -8,7 +9,12 @@ const registerPatient = async (req, res) => {
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
       [nhif_number, national_id, first_name, last_name, gender, dob, phone, email, address, next_of_kin]
     );
-    res.status(201).json(result.rows[0]);
+    const patient = result.rows[0];
+    
+    if (phone) {
+       await smsService.sendRegistrationWelcome(phone, first_name, patient.id);
+    }
+    res.status(201).json(patient);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

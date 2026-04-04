@@ -1,5 +1,7 @@
 const db = require('../db');
 const mpesaService = require('../services/mpesaService');
+const smsService = require('../services/smsService');
+const { generateInvoicePdf } = require('../services/pdfService');
 
 const createInvoice = async (req, res) => {
   try {
@@ -69,10 +71,15 @@ const payInvoice = async (req, res) => {
       await db.query(`UPDATE invoices SET status = 'paid', patient_balance = patient_balance - $1 WHERE id = $2`, [amount, id]);
       await db.query(`INSERT INTO payments (invoice_id, amount, method, transaction_ref) VALUES ($1, $2, 'mpesa', $3)`, [id, amount, stkRes.CheckoutRequestID]);
       
+      await smsService.sendPaymentConfirmation(phone, invoice.id, amount);
       return res.status(200).json({ message: 'M-Pesa STK Push initiated (Simulated paid state)', mpesa: stkRes });
     } else if (method === 'cash') {
       await db.query(`UPDATE invoices SET status = 'paid', patient_balance = patient_balance - $1 WHERE id = $2`, [amount, id]);
       await db.query(`INSERT INTO payments (invoice_id, amount, method) VALUES ($1, $2, 'cash')`, [id, amount]);
+      
+      if (phone) {
+        await smsService.sendPaymentConfirmation(phone, invoice.id, amount);
+      }
       return res.status(200).json({ message: 'Cash payment processed successfully' });
     }
     
@@ -119,4 +126,25 @@ const processNHIFClaim = async (req, res) => {
   }
 };
 
-module.exports = { createInvoice, payInvoice, processNHIFClaim, getInvoices };
+const downloadInvoiceReceipt = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const invRes = await db.query('SELECT * FROM invoices WHERE id = $1', [id]);
+    if (invRes.rows.length === 0) return res.status(404).json({ error: 'Invoice not found' });
+    const invoice = invRes.rows[0];
+    
+    const itemsRes = await db.query('SELECT * FROM invoice_items WHERE invoice_id = $1', [id]);
+    const items = itemsRes.rows;
+    
+    const buffer = await generateInvoicePdf(invoice, items);
+    
+    res.setHeader('Content-disposition', `attachment; filename=invoice_${id}.pdf`);
+    res.setHeader('Content-type', 'application/pdf');
+    res.status(200).send(buffer);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { createInvoice, payInvoice, processNHIFClaim, getInvoices, downloadInvoiceReceipt };
