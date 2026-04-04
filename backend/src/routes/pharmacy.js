@@ -8,6 +8,7 @@ router.put('/drugs/:id', auth, controller.updateDrug);
 router.get('/drugs', auth, controller.listDrugs);
 router.post('/dispense', auth, controller.dispense);
 router.get('/expiry', auth, controller.expiryReport);
+router.get('/prescription/:id', auth, controller.getPrescription);
 
 module.exports = router;
 const express = require('express');

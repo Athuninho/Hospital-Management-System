@@ -22,4 +22,15 @@
   "devDependencies": {
     "nodemon": "^2.0.22"
   }
+  ,
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon --watch src --exec node src/server.js",
+    "test": "jest --runInBand"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "jest": "^29.6.1",
+    "supertest": "^6.3.3"
+  }
 }

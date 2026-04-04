@@ -5,6 +5,7 @@ export default function Pharmacy(){
   const [drugs, setDrugs] = useState([])
   const [form, setForm] = useState({ name:'', generic_name:'', unit:'tab', price_kes:'', stock:0, expiry_date:'' })
   const [dispenseItems, setDispenseItems] = useState([{ drug_id:'', quantity:1 }])
+  const [visitId, setVisitId] = useState('')
   const [msg, setMsg] = useState('')
 
   const token = localStorage.getItem('token')
@@ -37,10 +38,19 @@ export default function Pharmacy(){
   const addDispenseRow = ()=> setDispenseItems([...dispenseItems, { drug_id:'', quantity:1 }])
 
   const doDispense = async ()=>{
+    // client-side validation
+    if (!dispenseItems.length) return setMsg('No items to dispense')
+    for (const it of dispenseItems) {
+      if (!it.drug_id) return setMsg('Select drug for all rows')
+      if (!it.quantity || it.quantity <= 0) return setMsg('Quantity must be > 0')
+    }
+    if (!confirm('Confirm dispense and bill to visit (if Visit ID provided)?')) return
     try{
-      const payload = { items: dispenseItems }
+      const payload = { items: dispenseItems, visit_id: visitId || undefined }
       await api.post('/pharmacy/dispense', payload, { headers: { Authorization: `Bearer ${token}` } })
       setMsg('Dispensed successfully')
+      setDispenseItems([{ drug_id:'', quantity:1 }])
+      setVisitId('')
       fetchDrugs()
     }catch(err){ setMsg('Dispense failed: '+(err.response?.data?.message||err.message)) }
   }
@@ -74,6 +84,10 @@ export default function Pharmacy(){
 
       <section className="bg-white p-4 rounded shadow">
         <h3 className="font-semibold">Dispense</h3>
+        <div className="mb-2">
+          <label className="block text-sm mb-1">Bill to Visit ID (optional)</label>
+          <input value={visitId} onChange={e=>setVisitId(e.target.value)} placeholder="Visit ID" className="border p-2 w-1/3" />
+        </div>
         {dispenseItems.map((it,i)=> (
           <div key={i} className="flex gap-2 items-center mt-2">
             <select value={it.drug_id} onChange={e=>updateDispenseItem(i,'drug_id',e.target.value)} className="border p-2 flex-1">
