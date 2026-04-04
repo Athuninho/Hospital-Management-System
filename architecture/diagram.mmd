@@ -1,0 +1,12 @@
+graph TD
+  Browser -->|HTTPS| Nginx[NGINX]
+  Nginx --> Backend[Express API]
+  Backend --> Postgres[(PostgreSQL)]
+  Backend --> Redis[(Redis)]
+  Backend --> S3[(S3/MinIO)]
+  Backend --> M-PesaAPI[Daraja / M-Pesa]
+  Backend --> SMS[SMS Provider]
+  Backend --> Worker[Background Workers]
+  Worker --> Postgres
+  Worker --> S3
+  Backend -->|Websocket| QueueUI[Queue Display]
