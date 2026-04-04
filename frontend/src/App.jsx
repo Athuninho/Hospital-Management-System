@@ -10,6 +10,8 @@ function App(){
             <button onClick={()=>setPage('home')} className="text-sm">Home</button>
             <button onClick={()=>setPage('register')} className="text-sm">Register Patient</button>
             <button onClick={()=>setPage('billing')} className="text-sm">Billing</button>
+            <button onClick={()=>setPage('pharmacy')} className="text-sm">Pharmacy</button>
+            <button onClick={()=>setPage('lab')} className="text-sm">Lab</button>
           </nav>
         </div>
       </header>
@@ -17,6 +19,8 @@ function App(){
         {page === 'home' && <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow"><p>Welcome to the Mombasa Hospital.</p></div>}
         {page === 'register' && <PatientRegistration />}
         {page === 'billing' && <BillingPage />}
+        {page === 'pharmacy' && <Pharmacy />}
+        {page === 'lab' && <Lab />}
       </main>
     </div>
   )
