@@ -15,7 +15,9 @@
     "express": "^4.18.2",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
-    "pg": "^8.11.0"
+    "pg": "^8.11.0",
+    "pdfkit": "^0.13.0",
+    "get-stream": "^8.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
