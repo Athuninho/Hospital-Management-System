@@ -1,14 +1,16 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, CreditCard, Pill, TestTube, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, CreditCard, Pill, TestTube, LogOut, BedDouble, CalendarClock } from 'lucide-react';
 
 export default function Sidebar() {
   const menu = [
     { title: 'Dashboard', path: '/', icon: <LayoutDashboard size={20} /> },
+    { title: 'Queue & Appts', path: '/queue', icon: <CalendarClock size={20} /> },
     { title: 'Patients', path: '/patients', icon: <Users size={20} /> },
     { title: 'Billing & NHIF', path: '/billing', icon: <CreditCard size={20} /> },
     { title: 'Pharmacy', path: '/pharmacy', icon: <Pill size={20} /> },
     { title: 'Laboratory', path: '/lab', icon: <TestTube size={20} /> },
+    { title: 'Inpatient Wards', path: '/wards', icon: <BedDouble size={20} /> },
   ];
 
   return (
