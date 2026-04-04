@@ -39,4 +39,15 @@ const getPatientById = async (req, res) => {
   }
 };
 
-module.exports = { registerPatient, getPatients, getPatientById };
+const uploadPatientFile = async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+    const filePath = `/uploads/${req.file.filename}`;
+    // Further implementation would insert this file tracking path into the database if a documents table existed
+    res.status(200).json({ message: 'File uploaded successfully', url: filePath, originName: req.file.originalname });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { registerPatient, getPatients, getPatientById, uploadPatientFile };
