@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/authJwt');
+const { verifyToken } = require('../middleware/auth');
 const nhifService = require('../services/nhifService');
 
 // Create claim (draft)
-router.post('/claim/create', auth, async (req, res) => {
+router.post('/claim/create', verifyToken, async (req, res) => {
   try {
     const { invoiceId } = req.body;
     if (!invoiceId) return res.status(400).json({ error: 'missing_invoice' });
@@ -17,7 +17,7 @@ router.post('/claim/create', auth, async (req, res) => {
 });
 
 // Submit claim for processing (simulated)
-router.post('/claim/submit', auth, async (req, res) => {
+router.post('/claim/submit', verifyToken, async (req, res) => {
   try {
     const { claimId } = req.body;
     if (!claimId) return res.status(400).json({ error: 'missing_claim' });

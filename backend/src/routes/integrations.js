@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/authJwt');
+const { verifyToken } = require('../middleware/auth');
 const mpesa = require('../services/mpesaService');
 const db = require('../db');
 
-router.post('/mpesa/stk', auth, async (req, res) => {
+router.post('/mpesa/stkpush', verifyToken, async (req, res) => {
   try {
     const { phone, amount, invoiceId } = req.body;
     const resp = await mpesa.stkPush(phone, amount, invoiceId);
