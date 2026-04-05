@@ -1,23 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/authJwt');
+const { verifyToken } = require('../middleware/auth');
 const controller = require('../controllers/pharmacyController');
 
-router.post('/drugs', auth, controller.addDrug);
-router.put('/drugs/:id', auth, controller.updateDrug);
-router.get('/drugs', auth, controller.listDrugs);
-router.post('/dispense', auth, controller.dispense);
-router.get('/expiry', auth, controller.expiryReport);
-router.get('/prescription/:id', auth, controller.getPrescription);
-
-module.exports = router;
-const express = require('express');
-const router = express.Router();
-const auth = require('../middleware/authJwt');
-const { addDrug, listDrugs, dispensePrescription } = require('../controllers/pharmacyController');
-
-router.get('/drugs', auth, listDrugs);
-router.post('/drugs', auth, addDrug);
-router.post('/dispense', auth, dispensePrescription);
+router.post('/drugs', verifyToken, controller.addDrug);
+router.put('/drugs/:id', verifyToken, controller.updateDrug);
+router.get('/drugs', verifyToken, controller.listDrugs);
+router.post('/dispense', verifyToken, controller.dispense);
+router.get('/expiry', verifyToken, controller.expiryReport);
+router.get('/prescription/:id', verifyToken, controller.getPrescription);
 
 module.exports = router;
