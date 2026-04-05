@@ -7,7 +7,6 @@ const billingRoutes = require('./routes/billing');
 const patientRoutes = require('./routes/patients');
 const integrations = require('./routes/integrations');
 const pharmacyRoutes = require('./routes/pharmacy');
-const pharmacyRoutes = require('./routes/pharmacy');
 const labRoutes = require('./routes/lab');
 const nhifRoutes = require('./routes/nhif');
 const appointmentRoutes = require('./routes/appointments');
