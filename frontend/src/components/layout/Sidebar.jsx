@@ -5,10 +5,10 @@ import { LayoutDashboard, Users, CreditCard, Pill, TestTube, LogOut, BedDouble, 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Users, CreditCard, Pill, TestTube, LogOut, BedDouble, CalendarClock } from 'lucide-react';
-import auth from '../../services/auth';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Sidebar() {
-  const user = auth.getUserFromToken();
+  const { user } = useAuth();
   const role = user?.role || 'reception';
 
   // menu visibility by role
@@ -23,7 +23,8 @@ export default function Sidebar() {
   ].filter(item => item.roles.includes(role));
 
   function handleLogout() {
-    auth.logout();
+    // use global logout to clear token
+    window.localStorage.removeItem('hms_token');
     window.location.href = '/login';
   }
 
