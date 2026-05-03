@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { verifyToken } = require('../middleware/auth');
+const { verifyToken, requireRole } = require('../middleware/auth');
 const controller = require('../controllers/pharmacyController');
 
 router.post('/drugs', verifyToken, requireRole(['pharmacy','admin']), controller.addDrug);
