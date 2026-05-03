@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import auth from '../services/auth';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -8,12 +8,12 @@ export default function Login() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const { login, loading } = useAuth();
+
   async function submit(e) {
     e.preventDefault();
     try {
-      const res = await auth.login(username, password);
-      const user = auth.getUserFromToken();
-      // redirect to root which will show role dashboard
+      await login(username, password);
       navigate('/');
     } catch (err) {
       setError(err.message || 'Login failed');
@@ -27,7 +27,7 @@ export default function Login() {
         {error && <div className="text-sm text-red-600 mb-2">{error}</div>}
         <input className="w-full p-2 border mb-2" placeholder="Username" value={username} onChange={e=>setUsername(e.target.value)} />
         <input className="w-full p-2 border mb-4" placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} />
-        <button className="w-full py-2 bg-primary text-white rounded">Login</button>
+        <button disabled={loading} className="w-full py-2 bg-primary text-white rounded">{loading ? 'Signing in...' : 'Login'}</button>
         <div className="mt-4 text-sm">
           <Link to="/register" className="text-primary underline">Create an account</Link>
         </div>

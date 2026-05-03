@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import auth from '../services/auth';
+import { useAuth } from '../context/AuthContext';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -10,12 +10,12 @@ export default function Register() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const { register, loading } = useAuth();
+
   async function submit(e) {
     e.preventDefault();
     try {
-      await auth.register({ username, password, full_name: fullName, role });
-      // auto-login after register
-      await auth.login(username, password);
+      await register({ username, password, full_name: fullName, role });
       navigate('/');
     } catch (err) {
       setError(err.message || 'Register failed');
@@ -40,7 +40,7 @@ export default function Register() {
           <option value="billing">Billing</option>
           <option value="admin">Admin</option>
         </select>
-        <button className="w-full py-2 bg-primary text-white rounded">Register</button>
+        <button disabled={loading} className="w-full py-2 bg-primary text-white rounded">{loading ? 'Creating account...' : 'Register'}</button>
         <div className="mt-4 text-sm">
           <Link to="/login" className="text-primary underline">Already have an account?</Link>
         </div>
