@@ -1,10 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Users, CreditCard, Pill, TestTube, LogOut, BedDouble, CalendarClock } from 'lucide-react';
-
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, CreditCard, Pill, TestTube, LogOut, BedDouble, CalendarClock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Sidebar() {
