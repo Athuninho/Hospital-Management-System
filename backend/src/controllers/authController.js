@@ -47,7 +47,7 @@ async function login(req, res) {
   const user = r.rows[0];
   const ok = await bcrypt.compare(password, user.password_hash);
   if (!ok) return res.status(401).json({ error: 'invalid_credentials' });
-  const token = jwt.sign({ sub: user.id, role: user.role_name || null }, process.env.JWT_SECRET || 'secret', { expiresIn: '8h' });
+  const token = jwt.sign({ sub: user.id, role: user.role_name || null }, process.env.JWT_SECRET || 'supersecret123', { expiresIn: '8h' });
   res.json({ token, user: { id: user.id, username: user.username, full_name: user.full_name, role: user.role_name || null } });
 }
 
