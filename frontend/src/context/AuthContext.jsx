@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
       if (!token) return;
       setLoading(true);
       try {
-        const res = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/api/auth/me', {
+        const res = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:4000') + '/api/auth/me', {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (!res.ok) throw new Error('Invalid token');
